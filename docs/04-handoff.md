@@ -7,10 +7,10 @@
 |---|---|
 | GitHub 리포 | https://github.com/user59371474/claude1 (private) |
 | Cloudflare Worker | `claude1` |
-| 운영 URL | `https://claude1.<계정 서브도메인>.workers.dev` — 첫 배포 후 Cloudflare 대시보드에서 확인 |
+| 운영 URL | https://claude1.user59371474.workers.dev |
 | 운영 브랜치 | `main` (push하면 자동 배포) |
 
-> 첫 배포 후 실제 운영 URL(또는 커스텀 도메인)을 `src/data/site.ts`의 `url`에 넣고 다시 배포해야 sitemap·OG·canonical 주소가 맞춰진다. 지금은 `https://claude1.workers.dev`로 임시 설정.
+> 커스텀 도메인을 연결하면 `src/data/site.ts`의 `url`을 새 주소로 바꾸고 다시 배포해야 sitemap·OG·canonical 주소가 맞춰진다.
 
 ## Cloudflare 연결 (최초 1회, 직접)
 1. Cloudflare 대시보드 → Workers & Pages → `claude1` Worker (없으면 Create → Import a repository)
