@@ -1,0 +1,22 @@
+---
+import { type Work, fileName, slug, TYPE_LABEL } from '../data/works';
+interface Props { work: Work; }
+const { work } = Astro.props;
+---
+<li data-type={work.type}>
+  <a href={`/work/${slug(work)}/`}>
+    <span class="no">{work.no}</span><span class="nm">{fileName(work)}</span><span class="ty">{work.title} · {TYPE_LABEL[work.type]}</span><span class="yr">{work.year}</span>
+  </a>
+</li>
+<style>
+  a { display: grid; grid-template-columns: 3ch 1fr auto; gap: var(--space-3); align-items: center; min-height: var(--tap); padding-inline: var(--space-2); border-bottom: var(--border-soft); }
+  .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ty { display: none; }
+  .no, .yr, .ty { color: var(--color-mute); }
+  a:hover, a:focus-visible { background: var(--color-ink); color: var(--color-paper); }
+  a:hover .no, a:hover .yr, a:hover .ty, a:focus-visible .no, a:focus-visible .yr, a:focus-visible .ty { color: var(--color-disabled); }
+  @media (min-width: 768px) {
+    a { grid-template-columns: 3ch 1fr 22ch 6ch; min-height: var(--space-7); }
+    .ty { display: block; }
+  }
+</style>

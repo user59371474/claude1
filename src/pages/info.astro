@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+import { works } from '../data/works';
+const clients = [...new Set(works.map((w) => w.client).filter((c) => c !== 'Self'))];
+---
+<Base title="Info" description="kimdongjunai — 디자인, 영상, 웹. 연락처와 클라이언트." path={['INFO']} current="info">
+  <div class="wrap">
+    <h1 class="title">kimdongjunai<span class="cursor" aria-hidden="true"></span></h1>
+    <p class="lead">디자인, 영상, 웹을 만듭니다.</p>
+    <section class="block" aria-labelledby="clients-h">
+      <h2 id="clients-h" class="label mute">Clients</h2>
+      <ul class="clients label">{clients.map((c) => <li>{c}</li>)}</ul>
+    </section>
+    <section class="block" id="contact" aria-labelledby="contact-h">
+      <h2 id="contact-h" class="label mute">Contact</h2>
+      <div class="row">
+        <a class="big" href={`mailto:${site.email}`} data-email>{site.email}</a>
+        <button type="button" class="copy label" data-copy={site.email}>Copy</button>
+      </div>
+      <a class="big" href={site.instagram} target="_blank" rel="noopener">Instagram ↗</a>
+    </section>
+  </div>
+</Base>
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Copied'; }
+      catch { const r = document.createRange(); r.selectNodeContents(document.querySelector('[data-email]')!); getSelection()?.removeAllRanges(); getSelection()?.addRange(r); b.textContent = 'Selected'; }
+      setTimeout(() => (b.textContent = 'Copy'), 1600);
+    });
+  });
+</script>
+<style>
+  .title { font: var(--weight-medium) var(--text-display) / var(--leading-tight) var(--font-mono); letter-spacing: var(--tracking-display); margin: 0; padding-top: var(--space-6); overflow-wrap: anywhere; }
+  .lead { font-size: var(--text-lead); margin: var(--space-4) 0 0; }
+  .block { margin-top: var(--space-7); border-top: var(--border); padding-top: var(--space-3); display: grid; gap: var(--space-3); }
+  h2 { margin: 0; font-weight: var(--weight-regular); }
+  .clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-2) var(--space-4); font-size: var(--text-body); }
+  @media (min-width: 768px) { .clients { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); }
+  .big { font: var(--weight-medium) var(--text-h3) / 1.2 var(--font-mono); overflow-wrap: anywhere; min-height: var(--tap); display: inline-flex; align-items: center; }
+  .big:hover { background: var(--color-ink); color: var(--color-paper); }
+  .copy { min-height: var(--tap); padding-inline: var(--space-3); border: var(--border); }
+  .copy:hover { background: var(--color-ink); color: var(--color-paper); }
+</style>

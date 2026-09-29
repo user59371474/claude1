@@ -1,0 +1,47 @@
+/* 기본 스타일. 값은 tokens.css 변수만 사용한다. */
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font: var(--weight-regular) var(--text-body) / var(--leading-body) var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1; }
+a { color: inherit; text-decoration: none; }
+img, video { display: block; max-width: 100%; height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; border-radius: var(--radius); }
+:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+::selection { background: var(--color-signal); color: var(--color-ink); }
+
+.wrap { max-width: var(--content-max); margin-inline: auto; padding-inline: var(--gutter); }
+@media (min-width: 768px) { :root { --gutter: var(--space-6); } }
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+.mute { color: var(--color-mute); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.skip { position: absolute; left: var(--space-2); top: -100px; z-index: 30; background: var(--color-ink); color: var(--color-paper); padding: var(--space-3); }
+.skip:focus { top: var(--space-2); }
+
+/* 이미지 로딩 중 자리 표시 */
+.media { background: var(--color-line); overflow: hidden; }
+.media img { width: 100%; height: 100%; object-fit: cover; }
+
+.cursor {
+  display: inline-block; width: .55em; height: .85em;
+  background: var(--color-signal); vertical-align: -.06em; margin-left: .1em;
+  animation: blink var(--blink) var(--ease-step) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .cursor { animation: none; } }

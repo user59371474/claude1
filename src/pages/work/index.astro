@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkIndex from '../../components/WorkIndex.astro';
+import { works } from '../../data/works';
+---
+<Base title="Work" description={`kimdongjunai 작업 아카이브 ${works.length}개 — 영상, 아이덴티티, 웹.`} path={['WORK']} current="work">
+  <div class="wrap">
+    <h1 class="head label"><span>ls /work</span><span class="mute">{works.length} items</span></h1>
+    <WorkIndex />
+  </div>
+</Base>
+<style>
+  .head { display: flex; justify-content: space-between; margin: 0; padding-block: var(--space-6) var(--space-4); font-weight: var(--weight-medium); }
+</style>

@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+import { type Work, fileName, slug, cover, TYPE_LABEL } from '../data/works';
+interface Props { work: Work; eager?: boolean; }
+const { work, eager = false } = Astro.props;
+const src = cover(work);
+---
+<li class="card" data-type={work.type}>
+  <a href={`/work/${slug(work)}/`} aria-label={`${fileName(work)}, ${work.title}, ${work.year}`}>
+    <div class="media sq">
+      {src ? <Image src={src} alt={`${work.title} (${TYPE_LABEL[work.type]}, ${work.year})`} widths={[400, 800]} sizes="(min-width:1280px) 25vw, (min-width:768px) 33vw, 50vw" loading={eager ? 'eager' : 'lazy'} format="webp" /> : null}
+    </div>
+    <div class="cap label"><span class="name">{fileName(work)}</span><span class="yr">{work.year}</span></div>
+  </a>
+</li>
+<style>
+  .card { background: var(--color-paper); min-width: 0; }
+  a { display: flex; flex-direction: column; padding: var(--space-2); gap: var(--space-2); }
+  .sq { aspect-ratio: 1; }
+  .cap { display: flex; justify-content: space-between; gap: var(--space-2); padding: var(--space-1); min-width: 0; }
+  .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .yr { color: var(--color-mute); }
+  a:hover .cap, a:focus-visible .cap { background: var(--color-ink); color: var(--color-paper); }
+  a:hover .yr, a:focus-visible .yr { color: var(--color-disabled); }
+</style>

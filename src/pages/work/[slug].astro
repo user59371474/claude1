@@ -1,0 +1,61 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { works, fileName, slug, cover, gallery, TYPE_LABEL, type Work } from '../../data/works';
+
+export function getStaticPaths() {
+  return works.map((w, i) => ({
+    params: { slug: slug(w) },
+    props: { work: w, prev: works[i + 1] ?? works[0], next: works[i - 1] ?? works[works.length - 1] },
+  }));
+}
+interface Props { work: Work; prev: Work; next: Work; }
+const { work, prev, next } = Astro.props;
+const media = [cover(work), ...gallery(work)].filter(Boolean);
+---
+<Base title={fileName(work)} description={`${work.title} (${TYPE_LABEL[work.type]}, ${work.year}) — ${work.client}.`} path={['WORK', fileName(work)]} current="work">
+  <article class="wrap">
+    <h1 class="title"><span>{fileName(work)}</span><span class="cursor" aria-hidden="true"></span></h1>
+    <dl class="meta label">
+      <div><dt>Type</dt><dd>{TYPE_LABEL[work.type]}</dd></div>
+      <div><dt>Year</dt><dd>{work.year}</dd></div>
+      <div><dt>Client</dt><dd>{work.client}</dd></div>
+      <div><dt>Role</dt><dd>{work.role}</dd></div>
+    </dl>
+    <div class="stack">
+      {media.map((m, i) => m && (
+        <figure class="media" style={`aspect-ratio:${m.width}/${m.height}`}>
+          <Image src={m} alt={`${work.title} ${i + 1}`} widths={[640, 1280, 1920]} sizes="(min-width:1440px) 1376px, 100vw" loading={i === 0 ? 'eager' : 'lazy'} format="webp" />
+        </figure>
+      ))}
+    </div>
+    <nav class="pager label" aria-label="다른 작업">
+      <a href={`/work/${slug(prev)}/`}>← {fileName(prev)}</a>
+      <a href="/work/" class="up">cd ..</a>
+      <a href={`/work/${slug(next)}/`}>{fileName(next)} →</a>
+    </nav>
+  </article>
+</Base>
+<style>
+  .title { font: var(--weight-medium) var(--text-h2) / var(--leading-tight) var(--font-mono); letter-spacing: var(--tracking-display); margin: 0; padding-block: var(--space-6) var(--space-4); overflow-wrap: anywhere; }
+  .meta { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0; border-block: var(--border); }
+  .meta div { padding: var(--space-2) var(--space-2) var(--space-3); border-right: var(--border-soft); min-width: 0; }
+  .meta div:nth-child(2n) { border-right: 0; }
+  .meta div:nth-child(-n+2) { border-bottom: var(--border-soft); }
+  @media (min-width: 768px) {
+    .title { font-size: var(--text-display); }
+    .meta { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .meta div:nth-child(2n) { border-right: var(--border-soft); }
+    .meta div:last-child { border-right: 0; }
+    .meta div:nth-child(-n+2) { border-bottom: 0; }
+  }
+  dt { color: var(--color-mute); }
+  dd { margin: 0; overflow-wrap: anywhere; }
+  .stack { display: grid; gap: var(--space-2); margin-top: var(--space-5); }
+  figure { margin: 0; }
+  .pager { display: grid; grid-template-columns: 1fr auto 1fr; margin-top: var(--space-6); border-block: var(--border); }
+  .pager a { display: flex; align-items: center; min-height: var(--space-7); padding-inline: var(--space-2); }
+  .pager a:last-child { justify-content: flex-end; }
+  .pager .up { border-inline: var(--border-soft); padding-inline: var(--space-4); }
+  .pager a:hover { background: var(--color-ink); color: var(--color-paper); }
+</style>

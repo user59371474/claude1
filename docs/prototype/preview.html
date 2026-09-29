@@ -1,0 +1,39 @@
+<title>KDJ Archive Prototype</title>
+<style>
+/* 시안 뷰어: 모바일 375 실제 크기 + PC 1280 축소 표시 */
+:root{--bg:#EDEDEB;--fg:#0A0A0A;--mute:#6B6B6B;--frame:#0A0A0A;--signal:#FF2A00;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161615;--fg:#EDEDEB;--mute:#9A9A96;--frame:#3A3A38;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161615;--fg:#EDEDEB;--mute:#9A9A96;--frame:#3A3A38;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:14px/1.5 var(--mono);margin:0}
+.wrap{padding-inline:16px;padding-block:24px 64px;max-width:1600px;margin:0 auto}
+header{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;align-items:baseline;margin-bottom:20px}
+h1{font-size:16px;font-weight:500;margin:0;text-transform:uppercase;letter-spacing:.04em}
+h1::before{content:"● ";color:var(--signal)}
+.note{color:var(--mute);margin:0;max-width:70ch}
+.row{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start}
+.dev{display:flex;flex-direction:column;gap:8px;min-width:0}
+.dev span{text-transform:uppercase;font-size:12px;letter-spacing:.06em;color:var(--mute)}
+.mob iframe{width:375px;max-width:calc(100vw - 32px);height:760px;border:1px solid var(--frame);background:#fff;display:block}
+.desk{flex:1 1 560px}
+.desk .box{border:1px solid var(--frame);background:#fff;overflow:hidden;position:relative;width:100%}
+.desk iframe{width:1280px;height:900px;border:0;transform-origin:0 0;display:block}
+a{color:inherit}
+</style>
+<div class="wrap">
+  <header>
+    <h1>kimdongjunai / 메인 시안</h1>
+    <p class="note">두 화면 모두 실제로 동작해요. 분야 탭, 그리드·목록 전환, 모바일 ≡ 메뉴를 눌러보세요. 이미지는 임시 그래픽이에요. <a href="index.html" target="_blank">시안만 크게 열기 ↗</a></p>
+  </header>
+  <div class="row">
+    <div class="dev mob"><span>Mobile · 375px</span><iframe src="index.html" title="모바일 375px 시안"></iframe></div>
+    <div class="dev desk"><span id="dl">Desktop · 1280px</span><div class="box" id="box"><iframe id="dk" src="index.html" title="PC 1280px 시안"></iframe></div></div>
+  </div>
+</div>
+<script>
+const box=document.getElementById('box'),dk=document.getElementById('dk');
+function fit(){const s=Math.min(1,box.clientWidth/1280);dk.style.transform=`scale(${s})`;box.style.height=(900*s)+'px';
+ document.getElementById('dl').textContent=`Desktop · 1280px (${Math.round(s*100)}% 축소)`}
+new ResizeObserver(fit).observe(box);fit();
+</script>

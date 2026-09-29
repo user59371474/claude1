@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>KIMDONGJUNAI/</title>
+<link rel="stylesheet" href="tokens.css">
+<style>
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--color-paper);color:var(--color-ink);font:var(--weight-regular) var(--text-body)/var(--leading-body) var(--font-sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;border-radius:var(--radius)}
+:focus-visible{outline:none;box-shadow:var(--focus-ring)}
+.mono{font-family:var(--font-mono)}
+.label{font-family:var(--font-mono);font-size:var(--text-label);letter-spacing:var(--tracking-label);text-transform:uppercase}
+.wrap{max-width:var(--content-max);margin-inline:auto;padding-inline:var(--gutter)}
+@media (min-width:768px){:root{--gutter:var(--space-6)}}
+
+/* ── TitleBar ── */
+.tb{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--color-paper);border-bottom:var(--border)}
+.tb .wrap{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);min-height:var(--tap)}
+.path{display:flex;align-items:center;min-height:var(--tap);font-weight:var(--weight-medium)}
+.path .long{display:none}
+.nav{display:none;gap:0}
+.nav a{display:flex;align-items:center;min-height:var(--tap);padding-inline:var(--space-3)}
+.nav a:hover{background:var(--color-ink);color:var(--color-paper)}
+.nav a[aria-current]::before{content:"●";color:var(--color-signal);margin-right:var(--space-1)}
+.tb-right{display:flex;align-items:center}
+.tb-right .contact{display:flex;align-items:center;min-height:var(--tap);padding-inline:var(--space-3)}
+.tb-right .contact::before{content:"●";color:var(--color-signal);margin-right:var(--space-1)}
+.menu-btn{min-width:var(--tap);min-height:var(--tap);font-size:var(--text-lead)}
+.clock{display:none;color:var(--color-mute);padding-left:var(--space-3)}
+@media (min-width:768px){
+  .path .short{display:none}.path .long{display:inline}
+  .nav{display:flex}.menu-btn,.tb-right .contact{display:none}
+}
+@media (min-width:1280px){.clock{display:inline-flex;align-items:center;min-height:var(--tap)}}
+
+/* ── Menu overlay ── */
+.overlay{position:fixed;inset:0;z-index:20;background:var(--color-ink);color:var(--color-paper);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.overlay .top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--color-mute);padding-inline:var(--gutter)}
+.overlay ul{list-style:none;margin:0;padding:var(--space-5) var(--gutter);display:grid;gap:var(--space-1)}
+.overlay li a{display:flex;align-items:center;min-height:var(--space-8);font:var(--weight-medium) var(--text-h3)/1 var(--font-mono);text-transform:uppercase}
+.overlay li a::before{content:"├─ ";color:var(--color-mute)}
+.overlay li:last-child a::before{content:"└─ "}
+.overlay li a:hover{color:var(--color-signal)}
+.overlay .close{min-width:var(--tap);min-height:var(--tap);font-size:var(--text-lead)}
+
+/* ── Hero ── */
+.hero{padding-block:var(--space-6) var(--space-5)}
+.cmd{font:var(--weight-medium) var(--text-display)/var(--leading-tight) var(--font-mono);letter-spacing:var(--tracking-display);margin:0;word-break:break-all}
+.cmd .dim{color:var(--color-mute)}
+.cursor{display:inline-block;width:.55em;height:.85em;background:var(--color-signal);vertical-align:-.06em;margin-left:.1em;animation:blink var(--blink) var(--ease-step) infinite}
+@keyframes blink{50%{opacity:0}}
+.feature{display:block;margin-top:var(--space-5);border:var(--border)}
+.feature .media{aspect-ratio:4/5;max-width:100%}
+.feature .cap{display:flex;justify-content:space-between;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-top:var(--border)}
+.feature:hover .cap{background:var(--color-ink);color:var(--color-paper)}
+.feature .play{display:inline-flex;gap:var(--space-2)}
+.feature .play::before{content:"▶";color:var(--color-signal)}
+@media (min-width:768px){.feature .media{aspect-ratio:16/9}}
+
+/* ── Index toolbar ── */
+.toolbar{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--tap) + 1px);z-index:5;background:var(--color-paper);display:flex;justify-content:space-between;align-items:stretch;border-block:var(--border);margin-top:var(--space-7)}
+.tabs,.views{display:flex}
+.tabs button,.views button{min-height:var(--tap);min-width:var(--tap);padding-inline:var(--space-3);border-right:var(--border-soft)}
+.views button{border-right:0;border-left:var(--border-soft)}
+.tabs button:hover,.views button:hover{background:var(--color-ink);color:var(--color-paper)}
+.tabs button[aria-pressed="true"],.views button[aria-pressed="true"]{background:var(--color-ink);color:var(--color-paper)}
+.tabs .n{color:var(--color-mute);margin-left:var(--space-1)}
+.tabs button[aria-pressed="true"] .n{color:var(--color-disabled)}
+.tabs .all-long{display:none}
+@media (max-width:767px){.views .txt{display:none}}
+
+/* ── Grid ── */
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--color-line);border-bottom:var(--border-soft)}
+@media (min-width:768px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (min-width:1280px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--color-paper);display:flex;flex-direction:column;min-width:0}
+.card a{display:flex;flex-direction:column;padding:var(--space-2);gap:var(--space-2)}
+.card .media{aspect-ratio:1;max-width:100%}
+.card .cap{display:flex;justify-content:space-between;gap:var(--space-2);padding:var(--space-1) var(--space-1);min-width:0}
+.card .cap .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card .cap .yr{color:var(--color-mute)}
+.card a:hover .cap,.card a:focus-visible .cap{background:var(--color-ink);color:var(--color-paper)}
+.card a:hover .cap .yr,.card a:focus-visible .cap .yr{color:var(--color-disabled)}
+
+/* ── List ── */
+.list{list-style:none;margin:0;padding:0}
+.list a{display:grid;grid-template-columns:3ch 1fr auto;gap:var(--space-3);align-items:center;min-height:var(--tap);padding-inline:var(--space-2);border-bottom:var(--border-soft)}
+.list .ty{display:none;color:var(--color-mute)}
+.list .no,.list .yr{color:var(--color-mute)}
+.list a:hover,.list a:focus-visible{background:var(--color-ink);color:var(--color-paper)}
+.list a:hover .no,.list a:hover .yr,.list a:hover .ty{color:var(--color-disabled)}
+.list .thumb{display:none}
+@media (min-width:768px){
+  .list a{grid-template-columns:3ch 1fr 10ch 6ch;min-height:var(--space-7)}
+  .list .ty{display:block}
+}
+
+/* ── Placeholder media (실제 작업물로 교체) ── */
+.media{background:var(--color-line);position:relative;overflow:hidden}
+.m1{background:var(--color-ink)}
+.m2{background:linear-gradient(160deg,var(--color-ink),var(--color-mute))}
+.m3{background:var(--color-signal)}
+.m4{background:repeating-linear-gradient(0deg,var(--color-ink) 0 2px,var(--color-paper) 2px 7px)}
+.m5{background:radial-gradient(circle at 35% 40%,var(--color-paper) 0 18%,var(--color-ink) 19%)}
+.m6{background:linear-gradient(90deg,var(--color-ink) 0 50%,var(--color-line) 50%)}
+.m7{background:conic-gradient(from 90deg at 60% 60%,var(--color-signal) 0 25%,var(--color-ink) 25% 100%)}
+.m8{background:repeating-linear-gradient(90deg,var(--color-mute) 0 1px,var(--color-paper) 1px 12px)}
+.hero-media{background:radial-gradient(120% 90% at 30% 35%,var(--color-mute) 0%,var(--color-ink) 60%)}
+.hero-media::after{content:"";position:absolute;left:8%;bottom:10%;width:22%;aspect-ratio:1;background:var(--color-signal)}
+
+/* ── StatusBar ── */
+.sb{border-top:var(--border);margin-top:var(--space-8)}
+.sb .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-2) var(--space-5);padding-block:var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom,0px))}
+.sb a{display:inline-flex;align-items:center;min-height:var(--tap)}
+.sb a:hover{background:var(--color-ink);color:var(--color-paper)}
+.sb .mute{color:var(--color-mute);display:inline-flex;align-items:center;min-height:var(--tap)}
+.sb .group{display:flex;flex-wrap:wrap;gap:0 var(--space-5)}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.cursor{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="tb">
+  <div class="wrap">
+    <a class="path label" href="#top" aria-label="KIMDONGJUNAI 홈"><span class="short">KDJ/</span><span class="long">KIMDONGJUNAI/</span></a>
+    <nav class="nav label" aria-label="주 메뉴">
+      <a href="#index" aria-current="page">Work</a><a href="#info">Info</a><a href="#contact">Contact</a><a href="#ig">Instagram</a><span class="clock mono" id="clock" aria-hidden="true"></span>
+    </nav>
+    <div class="tb-right label">
+      <a class="contact" href="#contact">Contact</a>
+      <button class="menu-btn mono" type="button" aria-expanded="false" aria-controls="menu" id="menuBtn" aria-label="메뉴 열기">≡</button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="menu" role="dialog" aria-modal="true" aria-label="메뉴" hidden>
+  <div class="top"><span class="label">KDJ/ — MENU</span><button class="close mono" type="button" id="menuClose" aria-label="메뉴 닫기">✕</button></div>
+  <ul>
+    <li><a href="#index">Work</a></li>
+    <li><a href="#info">Info</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#ig">Instagram</a></li>
+  </ul>
+</div>
+
+<main id="top">
+  <section class="hero wrap" aria-label="소개">
+    <h1 class="cmd"><span class="dim">~/</span>kimdongjunai<br>archive_2026<span class="cursor" aria-hidden="true"></span></h1>
+    <a class="feature" href="#detail" aria-label="대표작 KDJ_014.MOV 보기">
+      <div class="media hero-media" role="img" aria-label="대표작 영상 포스터 (임시 이미지)"></div>
+      <div class="cap label"><span class="play">KDJ_014.MOV</span><span>Brand film — 2026</span></div>
+    </a>
+  </section>
+
+  <section id="index" aria-label="작업 목록">
+    <div class="wrap">
+      <div class="toolbar label">
+        <div class="tabs" role="group" aria-label="분야 필터" id="tabs">
+          <button type="button" data-f="ALL" aria-pressed="true">All<span class="n" id="n-ALL"></span></button>
+          <button type="button" data-f="MOV" aria-pressed="false">Mov</button>
+          <button type="button" data-f="IDN" aria-pressed="false">Idn</button>
+          <button type="button" data-f="WEB" aria-pressed="false">Web</button>
+        </div>
+        <div class="views" role="group" aria-label="보기 방식">
+          <button type="button" data-v="grid" aria-pressed="true" aria-label="그리드 보기">▦<span class="txt"> Grid</span></button>
+          <button type="button" data-v="list" aria-pressed="false" aria-label="목록 보기">☰<span class="txt"> List</span></button>
+        </div>
+      </div>
+      <ul class="grid label" id="grid"></ul>
+      <ul class="list label" id="list" hidden></ul>
+    </div>
+  </section>
+</main>
+
+<footer class="sb label" id="contact">
+  <div class="wrap">
+    <div class="group"><span class="mute" id="count"></span><span class="mute" id="info">Design · Film · Web</span></div>
+    <div class="group"><a href="#contact">hello@kimdongjunai.com</a><a id="ig" href="#ig">Instagram ↗</a><span class="mute">© 2026 KDJ</span></div>
+  </div>
+</footer>
+
+<script>
+const works=[
+  ["014","MOV","Brand film","2026","m2"],["013","IDN","Identity","2026","m3"],["012","WEB","Website","2026","m4"],
+  ["011","MOV","Music video","2025","m1"],["010","IDN","Poster series","2025","m5"],["009","WEB","Lookbook site","2025","m6"],
+  ["008","MOV","Campaign","2025","m7"],["007","IDN","Packaging","2025","m8"],["006","MOV","Teaser","2024","m6"],
+  ["005","IDN","Logotype","2024","m2"],["004","WEB","Portfolio","2024","m3"],["003","MOV","Short film","2024","m5"]
+];
+const grid=document.getElementById('grid'),list=document.getElementById('list');
+function render(f){
+  const rows=works.filter(w=>f==='ALL'||w[1]===f);
+  grid.innerHTML=rows.map(w=>`<li class="card"><a href="#detail" aria-label="KDJ_${w[0]}.${w[1]}, ${w[2]}, ${w[3]}"><div class="media ${w[4]}"></div><div class="cap"><span class="name">KDJ_${w[0]}.${w[1]}</span><span class="yr">${w[3]}</span></div></a></li>`).join('');
+  list.innerHTML=rows.map(w=>`<li><a href="#detail"><span class="no">${w[0]}</span><span>KDJ_${w[0]}.${w[1]}</span><span class="ty">${w[2]}</span><span class="yr">${w[3]}</span></a></li>`).join('');
+  document.getElementById('count').textContent=`${rows.length} items`;
+}
+document.getElementById('n-ALL').textContent=works.length;
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('#tabs button').forEach(x=>x.setAttribute('aria-pressed',x===b));render(b.dataset.f)});
+document.querySelector('.views').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('.views button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  const g=b.dataset.v==='grid';grid.hidden=!g;list.hidden=g});
+render('ALL');
+const menu=document.getElementById('menu'),mb=document.getElementById('menuBtn');
+function setMenu(o){menu.hidden=!o;mb.setAttribute('aria-expanded',o);if(o)document.getElementById('menuClose').focus();else mb.focus()}
+mb.onclick=()=>setMenu(true);document.getElementById('menuClose').onclick=()=>setMenu(false);
+menu.addEventListener('click',e=>{if(e.target.closest('li a'))setMenu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!menu.hidden)setMenu(false)});
+const clock=document.getElementById('clock');
+function tick(){clock.textContent=new Date().toLocaleTimeString('en-GB',{timeZone:'Asia/Seoul',hour12:false})+' SEOUL'}
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import WorkIndex from '../components/WorkIndex.astro';
+import { works, fileName, slug, featureImage, TYPE_LABEL } from '../data/works';
+import { site } from '../data/site';
+const feature = works.find((w) => w.featured) ?? works[0];
+const img = featureImage();
+---
+<Base>
+  <section class="hero wrap" aria-label="소개">
+    <h1 class="cmd"><span class="mute">~/</span>kimdongjunai<br />archive_{site.year}<span class="cursor" aria-hidden="true"></span></h1>
+    <a class="feature" href={`/work/${slug(feature)}/`} aria-label={`대표작 ${fileName(feature)} 보기`}>
+      <div class="media frame">
+        {img && <Image src={img} alt={`${feature.title} (${TYPE_LABEL[feature.type]}, ${feature.year})`} widths={[640, 1280, 1920]} sizes="(min-width:1440px) 1376px, 100vw" loading="eager" fetchpriority="high" format="webp" />}
+      </div>
+      <div class="cap label"><span class="play">{fileName(feature)}</span><span>{feature.title} — {feature.year}</span></div>
+    </a>
+  </section>
+  <div class="wrap idx"><WorkIndex /></div>
+</Base>
+
+<style>
+  .hero { padding-block: var(--space-6) var(--space-5); }
+  .cmd { font: var(--weight-medium) var(--text-display) / var(--leading-tight) var(--font-mono); letter-spacing: var(--tracking-display); margin: 0; overflow-wrap: anywhere; }
+  .feature { display: block; margin-top: var(--space-5); border: var(--border); }
+  .frame { aspect-ratio: 4 / 5; }
+  @media (min-width: 768px) { .frame { aspect-ratio: 16 / 9; } }
+  .cap { display: flex; justify-content: space-between; gap: var(--space-3); padding: var(--space-2) var(--space-3); border-top: var(--border); min-height: var(--tap); align-items: center; }
+  .feature:hover .cap, .feature:focus-visible .cap { background: var(--color-ink); color: var(--color-paper); }
+  .play::before { content: "▶ "; color: var(--color-signal); }
+  .idx { margin-top: var(--space-7); }
+</style>

@@ -1,0 +1,99 @@
+---
+import { site } from '../data/site';
+interface Props { path?: string[]; current?: 'work' | 'info'; }
+const { path = [], current } = Astro.props;
+const links = [
+  { href: '/work/', label: 'Work', key: 'work' },
+  { href: '/info/', label: 'Info', key: 'info' },
+];
+---
+<header class="tb">
+  <div class="wrap bar">
+    <a class="path label" href="/" aria-label={`${site.name} 홈`}>
+      <span class="short">{site.short}/{path.length ? '…/' : ''}</span>
+      <span class="long">{site.name}/{path.map((p) => `${p}/`).join('')}</span>
+    </a>
+    <nav class="nav label" aria-label="주 메뉴">
+      {links.map((l) => <a href={l.href} aria-current={current === l.key ? 'page' : undefined}>{l.label}</a>)}
+      <a href="/info/#contact">Contact</a>
+      <a href={site.instagram} target="_blank" rel="noopener">Instagram</a>
+      <span class="clock mono" data-clock aria-hidden="true"></span>
+    </nav>
+    <div class="right label">
+      <a class="contact" href="/info/#contact">Contact</a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu" data-menu-open aria-label="메뉴 열기">≡</button>
+    </div>
+  </div>
+</header>
+
+<div class="overlay" id="menu" role="dialog" aria-modal="true" aria-label="메뉴" hidden>
+  <div class="top wrap"><span class="label">{site.short}/ — Menu</span><button class="close" type="button" data-menu-close aria-label="메뉴 닫기">✕</button></div>
+  <ul class="wrap">
+    <li><a href="/">Home</a></li>
+    <li><a href="/work/">Work</a></li>
+    <li><a href="/info/">Info</a></li>
+    <li><a href="/info/#contact">Contact</a></li>
+    <li><a href={site.instagram} target="_blank" rel="noopener">Instagram</a></li>
+  </ul>
+</div>
+
+<script>
+  const menu = document.getElementById('menu')!;
+  const openBtn = document.querySelector<HTMLButtonElement>('[data-menu-open]')!;
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-menu-close]')!;
+  const focusables = () => [...menu.querySelectorAll<HTMLElement>('a, button')];
+  const setMenu = (open: boolean) => {
+    menu.hidden = !open;
+    openBtn.setAttribute('aria-expanded', String(open));
+    document.body.style.overflow = open ? 'hidden' : '';
+    (open ? closeBtn : openBtn).focus();
+  };
+  openBtn.addEventListener('click', () => setMenu(true));
+  closeBtn.addEventListener('click', () => setMenu(false));
+  menu.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('li a')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (menu.hidden) return;
+    if (e.key === 'Escape') setMenu(false);
+    if (e.key === 'Tab') {
+      const f = focusables(); const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+  const clock = document.querySelector<HTMLElement>('[data-clock]');
+  if (clock) {
+    const tick = () => { clock.textContent = new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Seoul', hour12: false }) + ' SEOUL'; };
+    tick(); setInterval(tick, 1000);
+  }
+</script>
+
+<style>
+  .tb { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--color-paper); border-bottom: var(--border); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: var(--tap); }
+  .path { display: flex; align-items: center; min-height: var(--tap); font-weight: var(--weight-medium); min-width: 0; }
+  .path span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .path .long { display: none; }
+  .nav { display: none; }
+  .nav a { display: flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-3); }
+  .nav a:hover, .right a:hover { background: var(--color-ink); color: var(--color-paper); }
+  .nav a[aria-current]::before { content: "●"; color: var(--color-signal); margin-right: var(--space-1); }
+  .right { display: flex; align-items: center; }
+  .contact { display: flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-3); }
+  .contact::before { content: "●"; color: var(--color-signal); margin-right: var(--space-1); }
+  .menu-btn, .close { min-width: var(--tap); min-height: var(--tap); font-size: var(--text-lead); font-family: var(--font-mono); }
+  .clock { display: none; color: var(--color-mute); padding-left: var(--space-3); font-family: var(--font-mono); }
+  @media (min-width: 768px) {
+    .path .short { display: none; } .path .long { display: inline; }
+    .nav { display: flex; } .right { display: none; }
+  }
+  @media (min-width: 1280px) { .clock { display: inline-flex; align-items: center; min-height: var(--tap); } }
+
+  .overlay { position: fixed; inset: 0; z-index: 20; background: var(--color-ink); color: var(--color-paper); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); overflow-y: auto; }
+  .overlay .top { display: flex; justify-content: space-between; align-items: center; width: 100%; border-bottom: 1px solid var(--color-mute); }
+  .overlay ul { list-style: none; margin: 0; padding-block: var(--space-5); display: grid; gap: var(--space-1); width: 100%; }
+  .overlay li a { display: flex; align-items: center; min-height: var(--space-8); font: var(--weight-medium) var(--text-h3) / 1 var(--font-mono); text-transform: uppercase; }
+  .overlay li a::before { content: "├─ "; color: var(--color-mute); white-space: pre; }
+  .overlay li:last-child a::before { content: "└─ "; }
+  .overlay li a:hover { color: var(--color-signal); }
+  .overlay :focus-visible { box-shadow: 0 0 0 2px var(--color-ink), 0 0 0 4px var(--color-focus); }
+</style>

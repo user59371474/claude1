@@ -1,0 +1,21 @@
+---
+import { site } from '../data/site';
+import { works } from '../data/works';
+---
+<footer class="sb label">
+  <div class="wrap row">
+    <div class="group"><span class="mute">{works.length} items</span><span class="mute">Design · Film · Web</span></div>
+    <div class="group">
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+      <a href={site.instagram} target="_blank" rel="noopener">Instagram ↗</a>
+      <span class="mute">© {site.year} {site.short}</span>
+    </div>
+  </div>
+</footer>
+<style>
+  .sb { border-top: var(--border); margin-top: var(--space-8); }
+  .row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-5); padding-block: var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom, 0px)); }
+  .group { display: flex; flex-wrap: wrap; gap: 0 var(--space-5); }
+  .group > * { display: inline-flex; align-items: center; min-height: var(--tap); }
+  a:hover { background: var(--color-ink); color: var(--color-paper); }
+</style>

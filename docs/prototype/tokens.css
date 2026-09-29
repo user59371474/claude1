@@ -1,0 +1,67 @@
+/* kimdongjunai — 디자인 토큰 (A안 ARCHIVE, 2026-09-29 확정)
+   이 파일 외의 임의 색·폰트·간격·radius·shadow 값 사용 금지. 근거: docs/02-design-direction.md */
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500&display=swap");
+
+:root {
+  /* ── Color ─────────────────────────────── */
+  --color-paper: #FFFFFF;        /* 배경 */
+  --color-ink: #0A0A0A;          /* 기본 글자·선·반전 배경 */
+  --color-mute: #6B6B6B;         /* 보조 글자 (흰 배경 대비 5.3:1) */
+  --color-line: #DADADA;         /* 구분선·그리드 틈 (글자 사용 금지) */
+  --color-disabled: #8C8C8C;     /* 비활성·장식 전용 (글자 대비 3.4:1이라 본문 금지) */
+  --color-signal: #FF2A00;       /* 포인트: 커서·점·면. 위에 올리는 글자는 ink */
+  --color-signal-text: #E62600;  /* 흰 배경 위 빨간 글자가 필요할 때만 (4.5:1) */
+  --color-focus: #FF2A00;
+
+  /* ── Font ──────────────────────────────── */
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Noto Sans KR", system-ui, sans-serif;
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  /* 타입 스케일 — 본문은 16px 이상. 12px은 대문자 라벨 전용 */
+  --text-label: 0.75rem;   /* 12 */
+  --text-small: 0.875rem;  /* 14 */
+  --text-body: 1rem;       /* 16 */
+  --text-lead: 1.25rem;    /* 20 */
+  --text-h3: 1.75rem;      /* 28 */
+  --text-h2: 2.5rem;       /* 40 */
+  --text-display: clamp(2.5rem, 7vw, 6rem); /* 40 → 96 */
+  --leading-tight: 1.05;
+  --leading-body: 1.6;
+  --tracking-label: 0.06em;
+  --tracking-display: -0.02em;
+
+  /* ── Space (4px 기반) ───────────────────── */
+  --space-1: 0.25rem;  /* 4 */
+  --space-2: 0.5rem;   /* 8 */
+  --space-3: 0.75rem;  /* 12 */
+  --space-4: 1rem;     /* 16 */
+  --space-5: 1.5rem;   /* 24 */
+  --space-6: 2rem;     /* 32 */
+  --space-7: 3rem;     /* 48 */
+  --space-8: 4rem;     /* 64 */
+  --space-9: 6rem;     /* 96 */
+  --gutter: var(--space-4);        /* 모바일 좌우 여백, 768↑ 에서 --space-6 */
+  --content-max: 1440px;
+  --tap: 44px;                     /* 최소 터치 영역 */
+
+  /* ── Line / Radius / Shadow ─────────────── */
+  --border: 1px solid var(--color-ink);
+  --border-soft: 1px solid var(--color-line);
+  --radius: 0;                     /* 모든 요소 직각 */
+  --shadow: none;                  /* 그림자 사용 안 함 */
+  --focus-ring: 0 0 0 2px var(--color-paper), 0 0 0 4px var(--color-focus);
+
+  /* ── Motion (끊기는 모션) ────────────────── */
+  --dur-instant: 0ms;
+  --dur-step: 80ms;
+  --ease-step: steps(1, end);
+  --blink: 1s;
+
+  /* ── Breakpoints (참고용, 미디어쿼리에 숫자로 사용) ── */
+  /* tablet: 768px / desktop: 1280px */
+
+  color-scheme: light;
+}

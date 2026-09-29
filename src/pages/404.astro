@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="404" description="찾는 파일이 없습니다." path={['404']}>
+  <div class="wrap">
+    <h1 class="err">ERROR 404<br /><span class="mute">file not found</span><span class="cursor" aria-hidden="true"></span></h1>
+    <nav class="links label" aria-label="이동">
+      <a href="/">cd ~/</a>
+      <a href="/work/">ls /work</a>
+    </nav>
+  </div>
+</Base>
+<style>
+  .err { font: var(--weight-medium) var(--text-display) / var(--leading-tight) var(--font-mono); letter-spacing: var(--tracking-display); margin: 0; padding-block: var(--space-8) var(--space-6); overflow-wrap: anywhere; }
+  .links { display: flex; border-block: var(--border); }
+  .links a { display: flex; align-items: center; min-height: var(--space-7); padding-inline: var(--space-4); border-right: var(--border-soft); }
+  .links a:hover { background: var(--color-ink); color: var(--color-paper); }
+</style>
